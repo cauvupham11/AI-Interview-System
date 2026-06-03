@@ -1,0 +1,15 @@
+export const ROUTES = {
+  login: "/login",
+  register: "/register",
+  dashboard: "/dashboard",
+  interviewSetup: "/interviews/setup",
+  interviewRoom: "/interviews/room",
+  interviewRoomWithId: "/interviews/room/:sessionId",
+  interviewResult: "/interviews/result",
+  history: "/history",
+  historyDetail: "/history/:interviewId/detail",
+  historyResult: "/history/:interviewId/result",
+  historyDetailById: (interviewId) => `/history/${interviewId}/detail`,
+  historyResultById: (interviewId) => `/history/${interviewId}/result`,
+  interviewRoomById: (sessionId) => `/interviews/room/${sessionId}`,
+};

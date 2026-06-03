@@ -1,0 +1,99 @@
+:root {
+  --auth-cyan: #4cd7f6;
+  --auth-muted: #c7c4d7;
+  --auth-text: #dae2fd;
+  --auth-field: #131b2e;
+  --auth-secondary: #908fa0;
+  --auth-left: #060e20;
+  --auth-right: #0b1326;
+  --auth-accent-soft: #c0c1ff;
+  --auth-blue: #1000a9;
+  --auth-button-text: #0d0096;
+  --auth-border: #2d3449;
+  color: #dae2fd;
+  background: #0b1326;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(rgba(76, 215, 246, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76, 215, 246, 0.025) 1px, transparent 1px),
+    #0b1326;
+  background-size: 38px 38px;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tech-sweep {
+  0% {
+    transform: translateX(-120%);
+  }
+
+  100% {
+    transform: translateX(120%);
+  }
+}
+
+@keyframes soft-pulse {
+  0%,
+  100% {
+    opacity: 0.62;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes ring-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}
