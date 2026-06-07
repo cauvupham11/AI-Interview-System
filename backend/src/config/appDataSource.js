@@ -4,6 +4,7 @@ require('dotenv').config()
 
 const isDatabaseSslEnabled = process.env.DATABASE_SSL === 'true'
 const isRedisTlsEnabled = process.env.REDIS_TLS === 'true'
+const isRedisConfigured = Boolean(process.env.REDIS_URL || process.env.REDIS_HOSTNAME)
 
 const mySqlDataSource = new DataSource({
     type: 'mysql',
@@ -26,23 +27,26 @@ const mySqlDataSource = new DataSource({
     logging: false
 })
 
-const redisConfig = process.env.REDIS_URL
-    ? {
-          url: process.env.REDIS_URL
-      }
-    : {
-          username: process.env.REDIS_USERNAME || undefined,
-          password: process.env.REDIS_PASSWORD || undefined,
-          socket: {
-              host: process.env.REDIS_HOSTNAME,
-              port: Number(process.env.REDIS_PORT),
-              tls: isRedisTlsEnabled || undefined
+const redisConfig = isRedisConfigured
+    ? process.env.REDIS_URL
+        ? {
+              url: process.env.REDIS_URL
           }
-      }
+        : {
+              username: process.env.REDIS_USERNAME || undefined,
+              password: process.env.REDIS_PASSWORD || undefined,
+              socket: {
+                  host: process.env.REDIS_HOSTNAME,
+                  port: Number(process.env.REDIS_PORT || 6379),
+                  tls: isRedisTlsEnabled || undefined
+              }
+          }
+    : null
 
-const redis = createClient(redisConfig)
+const redis = redisConfig ? createClient(redisConfig) : null
 
 module.exports = {
     mySqlDataSource,
-    redis
+    redis,
+    isRedisConfigured
 }

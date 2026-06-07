@@ -1,5 +1,5 @@
 const app = require('./app')
-const { mySqlDataSource, redis } = require('./src/config/appDataSource')
+const { mySqlDataSource, redis, isRedisConfigured } = require('./src/config/appDataSource')
 
 const PORT = process.env.APP_PORT || 5000
 
@@ -13,6 +13,11 @@ async function startMysql() {
 }
 
 async function startRedis() {
+    if (!isRedisConfigured) {
+        console.log('Redis is not configured. Set REDIS_URL for Upstash/Render Redis if you need it.')
+        return
+    }
+
     try {
         await redis.connect()
         console.log('Redis connected successfully')

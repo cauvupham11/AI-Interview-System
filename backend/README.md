@@ -76,6 +76,7 @@ Ghi chu:
 - Neu Gemini tra `429 Too Many Requests`, API key/model dang het quota hoac chua co billing.
 - Khi dung TiDB Cloud Serverless, dat `DATABASE_SSL=true` vi TiDB bat buoc ket noi qua TLS.
 - Khi dung Upstash Redis, vao tab `TCP` va copy URL dang `rediss://default:<token>@<host>:6379` vao `REDIS_URL`. Khong dung `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` cho backend hien tai.
+- Khi deploy len Render, them `REDIS_URL` trong phan Environment Variables. Neu khong them, backend se bo qua Redis thay vi ket noi ve `localhost:6379`.
 - `synchronize` cua TypeORM dang bat khi `NODE_ENV !== production`, nen database schema co the tu dong cap nhat trong moi truong dev.
 
 ## Chay server
