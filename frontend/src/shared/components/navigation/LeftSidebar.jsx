@@ -14,7 +14,7 @@ const menuItems = [
   { label: "Phỏng vấn mới", path: ROUTES.interviewSetup, icon: plusIcon },
   { label: "Phòng phỏng vấn", path: ROUTES.interviewRoom, icon: interviewIcon },
   { label: "Lịch sử", path: ROUTES.history, icon: historyIcon },
-  { label: "Cài đặt", path: "/settings", icon: settingsIcon },
+  // { label: "Cài đặt", path: "/settings", icon: settingsIcon },
 ];
 
 function LeftSidebar({ isOpen = false, onClose }) {
