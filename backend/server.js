@@ -22,7 +22,7 @@ async function startRedis() {
         await redis.connect()
         console.log('Redis connected successfully')
     } catch (error) {
-        console.log('Redis connect error:', error)
+        console.warn('Redis unavailable, continuing without Redis:', error.message)
     }
 }
 

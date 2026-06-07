@@ -4,7 +4,24 @@ require('dotenv').config()
 
 const isDatabaseSslEnabled = process.env.DATABASE_SSL === 'true'
 const isRedisTlsEnabled = process.env.REDIS_TLS === 'true'
-const isRedisConfigured = Boolean(process.env.REDIS_URL || process.env.REDIS_HOSTNAME)
+const cleanEnvValue = (value) => {
+    if (!value) {
+        return value
+    }
+
+    return value.trim().replace(/^['"]|['"]$/g, '')
+}
+
+const redisUrl = cleanEnvValue(process.env.REDIS_URL)
+const redisHostname = cleanEnvValue(process.env.REDIS_HOSTNAME)
+const redisUsername = cleanEnvValue(process.env.REDIS_USERNAME)
+const redisPassword = cleanEnvValue(process.env.REDIS_PASSWORD)
+const redisConnectTimeout = Number(process.env.REDIS_CONNECT_TIMEOUT || 5000)
+const isLocalRedisHostname = ['localhost', '127.0.0.1', '::1'].includes(redisHostname)
+const isRedisConfigured = Boolean(
+    redisUrl ||
+        (redisHostname && (process.env.NODE_ENV !== 'production' || !isLocalRedisHostname))
+)
 
 const mySqlDataSource = new DataSource({
     type: 'mysql',
@@ -28,17 +45,23 @@ const mySqlDataSource = new DataSource({
 })
 
 const redisConfig = isRedisConfigured
-    ? process.env.REDIS_URL
+    ? redisUrl
         ? {
-              url: process.env.REDIS_URL
+              url: redisUrl,
+              socket: {
+                  connectTimeout: redisConnectTimeout,
+                  reconnectStrategy: false
+              }
           }
         : {
-              username: process.env.REDIS_USERNAME || undefined,
-              password: process.env.REDIS_PASSWORD || undefined,
+              username: redisUsername || undefined,
+              password: redisPassword || undefined,
               socket: {
-                  host: process.env.REDIS_HOSTNAME,
+                  host: redisHostname,
                   port: Number(process.env.REDIS_PORT || 6379),
-                  tls: isRedisTlsEnabled || undefined
+                  tls: isRedisTlsEnabled || undefined,
+                  connectTimeout: redisConnectTimeout,
+                  reconnectStrategy: false
               }
           }
     : null
