@@ -50,9 +50,15 @@ DATABASE_PORT=3306
 DATABASE_USERNAME=root
 DATABASE_PASSWORD=your_password
 DATABASE_NAME=ai_interview_system
+DATABASE_SSL=false
+DATABASE_SSL_REJECT_UNAUTHORIZED=true
 
 REDIS_HOSTNAME=localhost
 REDIS_PORT=6379
+REDIS_USERNAME=
+REDIS_PASSWORD=
+REDIS_TLS=false
+REDIS_URL=
 
 JWT_ACCESS_SECRET=replace_with_access_secret
 JWT_REFRESH_SECRET=replace_with_refresh_secret
@@ -68,6 +74,8 @@ NODE_ENV=development
 Ghi chu:
 - `GEMINI_API_KEY` bat buoc neu muon sinh cau hoi/cham diem bang AI.
 - Neu Gemini tra `429 Too Many Requests`, API key/model dang het quota hoac chua co billing.
+- Khi dung TiDB Cloud Serverless, dat `DATABASE_SSL=true` vi TiDB bat buoc ket noi qua TLS.
+- Khi dung Upstash Redis, vao tab `TCP` va copy URL dang `rediss://default:<token>@<host>:6379` vao `REDIS_URL`. Khong dung `UPSTASH_REDIS_REST_URL`/`UPSTASH_REDIS_REST_TOKEN` cho backend hien tai.
 - `synchronize` cua TypeORM dang bat khi `NODE_ENV !== production`, nen database schema co the tu dong cap nhat trong moi truong dev.
 
 ## Chay server

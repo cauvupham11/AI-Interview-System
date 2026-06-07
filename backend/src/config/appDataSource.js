@@ -2,6 +2,9 @@ const { DataSource } = require('typeorm')
 const { createClient } = require('redis')
 require('dotenv').config()
 
+const isDatabaseSslEnabled = process.env.DATABASE_SSL === 'true'
+const isRedisTlsEnabled = process.env.REDIS_TLS === 'true'
+
 const mySqlDataSource = new DataSource({
     type: 'mysql',
     host: process.env.DATABASE_HOSTNAME,
@@ -9,6 +12,12 @@ const mySqlDataSource = new DataSource({
     username: process.env.DATABASE_USERNAME,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_NAME,
+    ssl: isDatabaseSslEnabled
+        ? {
+              minVersion: 'TLSv1.2',
+              rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false'
+          }
+        : undefined,
 
     entities: ['src/entities/*.js'],
     migrations: ['src/migrations/*.js'],
@@ -17,12 +26,21 @@ const mySqlDataSource = new DataSource({
     logging: false
 })
 
-const redis = createClient({
-    socket: {
-        host: process.env.REDIS_HOSTNAME,
-        port: Number(process.env.REDIS_PORT)
-    }
-})
+const redisConfig = process.env.REDIS_URL
+    ? {
+          url: process.env.REDIS_URL
+      }
+    : {
+          username: process.env.REDIS_USERNAME || undefined,
+          password: process.env.REDIS_PASSWORD || undefined,
+          socket: {
+              host: process.env.REDIS_HOSTNAME,
+              port: Number(process.env.REDIS_PORT),
+              tls: isRedisTlsEnabled || undefined
+          }
+      }
+
+const redis = createClient(redisConfig)
 
 module.exports = {
     mySqlDataSource,

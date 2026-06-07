@@ -27,6 +27,10 @@ module.exports = {
 
     REDIS_HOSTNAME: process.env.REDIS_HOSTNAME,
     REDIS_PORT: Number(process.env.REDIS_PORT),
+    REDIS_USERNAME: process.env.REDIS_USERNAME,
+    REDIS_PASSWORD: process.env.REDIS_PASSWORD,
+    REDIS_TLS: process.env.REDIS_TLS,
+    REDIS_URL: process.env.REDIS_URL,
 
     GEMINI_API_KEY: process.env.GEMINI_API_KEY,
     GEMINI_MODEL: process.env.GEMINI_MODEL || 'gemini-2.0-flash',
