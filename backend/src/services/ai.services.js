@@ -19,6 +19,36 @@ const getLanguageInstruction = (interviewLanguage = 'vi') => {
         ? 'Write the interview question, feedback, suggested answer, and summary in English.'
         : 'Write the interview question, feedback, suggested answer, and summary in Vietnamese.';
 };
+
+const getGeminiErrorStatus = (message) => {
+    if (message.includes('429') || message.toLowerCase().includes('quota')) {
+        return 503;
+    }
+
+    return 502;
+};
+
+const getGeminiErrorMessage = (message) => {
+    const normalizedMessage = message.toLowerCase();
+
+    if (message.includes('429') || normalizedMessage.includes('quota')) {
+        return 'Dich vu AI dang qua tai hoac het quota, vui long thu lai sau';
+    }
+
+    if (message.includes('400') || normalizedMessage.includes('api key not valid')) {
+        return 'GEMINI_API_KEY khong hop le hoac chua duoc kich hoat';
+    }
+
+    if (message.includes('403') || normalizedMessage.includes('permission')) {
+        return 'GEMINI_API_KEY khong co quyen goi Gemini API';
+    }
+
+    if (message.includes('404') || normalizedMessage.includes('not found')) {
+        return 'GEMINI_MODEL khong ton tai hoac khong duoc ho tro';
+    }
+
+    return 'Khong the ket noi dich vu AI, vui long thu lai sau';
+};
 //Khởi tạo và trả về model Gemini AI
 
 const getGeminiModel = ({ systemPrompt, temperature }) => {
@@ -62,13 +92,15 @@ const callAiJson = async ({ systemPrompt, userPrompt, userParts, temperature = 0
             : userPrompt);
     } catch (error) {
         const message = error.message || '';
-        const aiError = new Error(
-            message.includes('429') || message.toLowerCase().includes('quota')
-                ? 'Dich vu AI dang qua tai hoac het quota, vui long thu lai sau'
-                : 'Khong the ket noi dich vu AI, vui long thu lai sau'
-        );
+        const aiError = new Error(getGeminiErrorMessage(message));
 
-        aiError.statusCode = message.includes('429') ? 503 : 502;
+        aiError.statusCode = getGeminiErrorStatus(message);
+        aiError.cause = error;
+        console.error('Gemini API request failed:', {
+            statusCode: aiError.statusCode,
+            model: environment.GEMINI_MODEL,
+            message,
+        });
         throw aiError;
     }
 

@@ -179,7 +179,7 @@ const createSession = async ({
     interviewType = 'general',
     interviewLanguage = 'vi',
     sourceContent = null,
-    waitForFirstQuestion = false,
+    waitForFirstQuestion = true,
 }) => {
     const session = sessionRepository().create({
         accountId,
@@ -195,11 +195,18 @@ const createSession = async ({
     });
 
     const savedSession = await sessionRepository().save(session);
-    const firstQuestion = waitForFirstQuestion
-        ? await createNextQuestion({
-            session: savedSession,
-        })
-        : null;
+    let firstQuestion = null;
+
+    if (waitForFirstQuestion) {
+        try {
+            firstQuestion = await createNextQuestion({
+                session: savedSession,
+            });
+        } catch (error) {
+            await sessionRepository().remove(savedSession);
+            throw error;
+        }
+    }
 
     if (!waitForFirstQuestion) {
         createFirstQuestionInBackground({
