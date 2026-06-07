@@ -24,19 +24,26 @@ function getBreadcrumbs(pathname) {
   return breadcrumbs[pathname] || ["Tổng quan"];
 }
 
-function Topbar() {
+function Topbar({ onOpenSidebar }) {
   const { pathname } = useLocation();
   const activeBreadcrumb = getBreadcrumbs(pathname);
 
   return (
     <header className="app-topbar">
-      <div className="app-breadcrumb">
-        {activeBreadcrumb.map((item, index) => (
-          <span key={item}>
-            {index > 0 ? <span className="app-breadcrumb-separator">/</span> : null}
-            {item}
-          </span>
-        ))}
+      <div className="app-topbar-left">
+        <button className="app-menu-button" onClick={onOpenSidebar} type="button" aria-label="Mở menu">
+          <span />
+          <span />
+          <span />
+        </button>
+        <div className="app-breadcrumb">
+          {activeBreadcrumb.map((item, index) => (
+            <span key={item}>
+              {index > 0 ? <span className="app-breadcrumb-separator">/</span> : null}
+              {item}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className="app-topbar-actions">

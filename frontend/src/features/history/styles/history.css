@@ -207,7 +207,7 @@
 }
 
 .history-meta-grid span,
-.history-score-row span {
+.history-score-row > div span {
   display: block;
   color: #c7c4d7;
   font-size: 10px;
@@ -238,6 +238,7 @@
   color: #dae2fd;
   font-size: 13px;
   font-weight: 900;
+  line-height: 1;
 }
 
 .history-result-button {

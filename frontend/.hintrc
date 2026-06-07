@@ -11,6 +11,7 @@
           "min-height: auto"
         ]
       }
-    ]
+    ],
+    "meta-viewport": "off"
   }
 }

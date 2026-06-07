@@ -17,7 +17,7 @@ const menuItems = [
   { label: "Cài đặt", path: "/settings", icon: settingsIcon },
 ];
 
-function LeftSidebar() {
+function LeftSidebar({ isOpen = false, onClose }) {
   const navigate = useNavigate();
   const { account, logout } = useAuth();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -37,7 +37,7 @@ function LeftSidebar() {
   };
 
   return (
-    <aside className="app-sidebar">
+    <aside className={`app-sidebar ${isOpen ? "app-sidebar-open" : ""}`}>
       <div className="app-sidebar-brand">
         <p>InterviewAI</p>
         <span>AI-Powered Success</span>
@@ -50,6 +50,7 @@ function LeftSidebar() {
               `app-sidebar-link ${isActive ? "app-sidebar-link-active" : ""}`
             }
             key={item.label}
+            onClick={onClose}
             to={item.path}
           >
             <img src={item.icon} alt="" aria-hidden="true" />
@@ -63,7 +64,7 @@ function LeftSidebar() {
           <img src={helpIcon} alt="" aria-hidden="true" />
           <span>Hỗ trợ</span>
         </a>
-        <button
+        {/* <button
           className="app-sidebar-logout"
           disabled={isLoggingOut}
           onClick={handleLogout}
@@ -71,7 +72,7 @@ function LeftSidebar() {
         >
           <img src={logoutIcon} alt="" aria-hidden="true" />
           <span>{isLoggingOut ? "Đang đăng xuất..." : "Đăng xuất"}</span>
-        </button>
+        </button> */}
         <button
           className="app-sidebar-user"
           disabled={isLoggingOut}
